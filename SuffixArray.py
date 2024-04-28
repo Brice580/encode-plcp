@@ -78,7 +78,27 @@ class SuffixArray:
         
         return pclp
 
+    def getEncodedPLCP(self):
+        phi = [0] * self.n
+        for i in range(self.n):
+            if self.ranks[i] == 0:
+                phi[self.ranks[i]] = self.ranks[-1]
+            else:
+                phi[self.ranks[i]] = self.ranks[i - 1]
+
+        l = 0
+        encoded_plcp = [0] * self.n
+        for i in range(self.n):
+            p = phi[i]
+            while i + l < self.n and p + l < self.n and self.T[i + l] == self.T[p + l]:
+                l += 1
+            encoded_plcp[i] = 2 * i + l  # Encoding the PLCP value
+            l = max(l - 1, 0)
+        return encoded_plcp
+
+
+
+
 if __name__ == '__main__':
-    sa = SuffixArray('banana')
-    print('SA = ', sa.ranks)
-    print('PLCP = ', sa.getPLCP())
+    sa = SuffixArray('banana$')
+    x = sa.getPLCP()
