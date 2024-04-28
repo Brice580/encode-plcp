@@ -67,8 +67,7 @@ class SuffixArray:
         for i in range(self.n):
             if self.ranks[i] == 0:
                 phi[self.ranks[i]] = self.ranks[-1]
-            else:
-                phi[self.ranks[i]] = self.ranks[i - 1]
+            phi[self.ranks[i]] = self.ranks[i - 1]
 
         l = 0
         # Calculate maximum index for bitarray
@@ -78,12 +77,13 @@ class SuffixArray:
 
         for i in range(self.n):
             p = phi[i]
-            while i + l < self.n and p + l < self.n and self.T[i + l] == self.T[p + l]:
+            while self.T[i + l] == self.T[p + l]:
                 l += 1
             bit_position = 2 * i + l  # Calculate the bit position
             bit_arr[bit_position] = True  # Set the bit at the calculated position
             l = max(l - 1, 0)
 
+        print(bit_arr)
         compressed_bit_array = CompressedRunsBitArray(bit_array=bit_arr)
         return compressed_bit_array
     
@@ -138,7 +138,7 @@ class SuffixArray:
     
 
 if __name__ == '__main__':
-    sa = SuffixArray('gatagaca')
+    sa = SuffixArray('asasdad')
     print('SA = ', sa.ranks)
     print('PLCP = ', sa.getPLCP())
     print('PLCP = ', sa.getEncodedPLCP())
