@@ -37,22 +37,28 @@ def construct_suffix_array_naive(string):
     return suffix_array
 
 
-def test(instances, alphabet_size, length):
-    
+def generate_test_cases(instances, alphabet_size, length):
+    tests = []
     for i in range(instances):
         
         text = ''.join(random.choice(string.ascii_lowercase[:alphabet_size]) for _ in
         range(length))
+
+        text += '$'
         
         sa_naive = construct_suffix_array_naive(text)
         plcp_naive = compute_plcp_naive(text, sa_naive)
         
         #call optimized sa & plcp functions and compare
 
-        print(text, sa_naive, plcp_naive)
+        #print(text, sa_naive, plcp_naive)
+        tests.append({
+            'text': text, 
+            'expectedSA':sa_naive, 
+            'expectedPCLP':plcp_naive
+        })
         
-        
-    print("Passed")
-    return True
+    #print("Passed")
+    return tests
     
-test(10, 26, 10)
+generate_test_cases(10, 26, 10)

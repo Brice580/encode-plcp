@@ -1,9 +1,12 @@
 import math
+from TestingUtils import generate_test_cases
+import time
+import pickle
 
 class SuffixArray:
     #sets self.T to the input string and self.ranks to the lexographical ordering
     def __init__(self, T):
-        self.T = T + '$'
+        self.T = T #+ '$'
         self.n = len(self.T)
         self.ranks = [0]*self.n
         k = math.ceil(math.log2(len(self.T)))
@@ -77,6 +80,13 @@ class SuffixArray:
             l = max(l - 1, 0)
         
         return pclp
+    
+def check_increases_by_more_than_one(arr):
+    reversed_arr = arr[::-1]  # Reverse the array
+    for i in range(1, len(reversed_arr)):
+        if reversed_arr[i] - reversed_arr[i-1] > 1:
+            return True  # Found an increase by more than 1
+    return False  # No increase by more than 1 found
 
     def getEncodedPLCP(self):
         phi = [0] * self.n
@@ -100,5 +110,47 @@ class SuffixArray:
 
 
 if __name__ == '__main__':
-    sa = SuffixArray('banana$')
-    x = sa.getPLCP()
+    sa = SuffixArray('ababab$')
+    print('SA = ', sa.ranks)
+    print('PLCP = ', sa.getPLCP())
+
+    sas = []
+    passed = 0
+    failed = 0
+    tests = generate_test_cases(10,3,10)
+    #tests += generate_test_cases(10,10,100)
+    #tests += generate_test_cases(10,10,1000)
+    #tests += generate_test_cases(10,10,10000)
+    #tests += generate_test_cases(10,10,100000)
+    for test in tests:
+        start = time.perf_counter()
+        sa = SuffixArray(test['text'])
+        sas.append(sa)
+        end = time.perf_counter()
+        print(f'\nSA took {end-start} for test of length {len(test["text"])}')
+        start = time.perf_counter()
+        plcp = sa.getPLCP()
+        end = time.perf_counter()
+        print(f'PLCP took {end-start} for test of length {len(test["text"])}')
+        print()
+        print(sa.T)
+        print(plcp)
+        print()
+
+        if sa.ranks != test['expectedSA'] and check_increases_by_more_than_one(plcp):
+            print("FAILED")
+            failed += 1
+        else:
+            passed += 1
+    print(f'PASSED = {passed}, FAILED = {failed}')
+    #with open('sas.pkl', 'wb') as output_file:
+    #    pickle.dump(sas, output_file)
+
+    #with open('sas.pkl', 'rb') as input_file:
+    #    wow = pickle.load(input_file)
+
+    # Display the deserialized objects
+    #for sa in wow:
+    #    print()
+    #    print(sa.T)
+    #    print(sa.ranks)
