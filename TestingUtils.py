@@ -2,6 +2,9 @@ import random
 import string
 
 def compute_plcp_naive(input_string, suffix_array):
+
+    input_string += '$'
+
     n = len(input_string)
     lcp = [0] * n
 
@@ -27,6 +30,8 @@ def compute_plcp_naive(input_string, suffix_array):
 
 
 def construct_suffix_array_naive(string):
+
+    string += "$"
     suffixes = []
     for i in range(len(string)):
         suffixes.append((string[i:], i))        
@@ -44,7 +49,6 @@ def generate_test_cases(instances, alphabet_size, length):
         text = ''.join(random.choice(string.ascii_lowercase[:alphabet_size]) for _ in
         range(length))
 
-        text += '$'
         
         sa_naive = construct_suffix_array_naive(text)
         plcp_naive = compute_plcp_naive(text, sa_naive)

@@ -73,8 +73,7 @@ class SuffixArray:
         for i in range (0, self.n):
             if self.ranks[i] == 0:
                 phi[self.ranks[i]] = self.ranks[-1]
-            else:
-                phi[self.ranks[i]] = self.ranks[i-1]
+            phi[self.ranks[i]] = self.ranks[i-1]
 
         l = 0
         
@@ -100,8 +99,7 @@ class SuffixArray:
         for i in range (0, self.n):
             if self.ranks[i] == 0:
                 phi[self.ranks[i]] = self.ranks[-1]
-            else:
-                phi[self.ranks[i]] = self.ranks[i-1]
+            phi[self.ranks[i]] = self.ranks[i-1]
 
         #compute plcp
         l = 0
