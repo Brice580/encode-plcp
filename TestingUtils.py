@@ -49,16 +49,13 @@ def generate_test_cases(instances, alphabet_size, length):
         sa_naive = construct_suffix_array_naive(text)
         plcp_naive = compute_plcp_naive(text, sa_naive)
         
-        #call optimized sa & plcp functions and compare
-
-        #print(text, sa_naive, plcp_naive)
+      
         tests.append({
             'text': text, 
             'expectedSA':sa_naive, 
             'expectedPCLP':plcp_naive
         })
         
-    #print("Passed")
     return tests
     
 generate_test_cases(10, 26, 10)

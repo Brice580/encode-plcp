@@ -80,64 +80,52 @@ def run_tests():
 
         size *= 10
 
-    # Separating x and y coordinates
     print(regular_runtime)
     print(regular_lcp_runtime)
 
     regular_x, regular_y = zip(*regular_size)
     encoded_x, encoded_y = zip(*encoded_size)
 
-    # Plotting
     plt.figure(figsize=(8, 4))
     plt.xscale('log')
     plt.plot(regular_x, regular_y, label='Regular Size', marker='o')
     plt.plot(encoded_x, encoded_y, label='Encoded Size', marker='o')
 
-    # Adding labels and title
     plt.xlabel('Input String Length')
     plt.ylabel('Average Size (Bytes)')
     plt.title('Regular and Succint PLCP Sizes by String Length')
     plt.legend()
 
-    # Show the plot
     plt.savefig('sizes')
 
-    # Separating x and y coordinates
     regular_x, regular_y = zip(*regular_runtime)
     encoded_x, encoded_y = zip(*encoded_runtime)
 
-    # Plotting
     plt.figure(figsize=(8, 4))
     plt.xscale('log')
     plt.plot(regular_x, regular_y, label='Regular Runtime', marker='o')
     plt.plot(encoded_x, encoded_y, label='Encoded Runtime', marker='o')
 
-    # Adding labels and title
     plt.xlabel('Input String Length')
     plt.ylabel('Average Runtime (seconds)')
     plt.title('Regular and Succint PLCP Construction Runtimes by String Length')
     plt.legend()
 
-    # Show the plot
     plt.savefig('pclp_construction_runtime')
 
-    # Separating x and y coordinates
     regular_x, regular_y = zip(*regular_lcp_runtime)
     encoded_x, encoded_y = zip(*encoded_lcp_runtime)
 
-    # Plotting
     plt.figure(figsize=(8, 4))
     plt.xscale('log')
     plt.plot(regular_x, regular_y, label='Regular Runtime', marker='o')
     plt.plot(encoded_x, encoded_y, label='Encoded Runtime', marker='o')
 
-    # Adding labels and title
     plt.xlabel('Input String Length')
     plt.ylabel('Average Runtime (seconds)')
     plt.title('Regular and Succint LCP from PLCP Runtimes by String Length')
     plt.legend()
 
-    # Show the plot
     plt.savefig('lcp_runtime')
 
 if __name__ == '__main__':
