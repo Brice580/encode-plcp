@@ -5,12 +5,14 @@ from TestingUtils import construct_suffix_array_naive, compute_plcp_naive
 class SuffixArray:
     #sets self.T to the input string and self.ranks to the lexographical ordering
     def __init__(self, T, ranks = []):
+        if T[-1] != '$':
+            T+='$'
         if ranks != []:
             self.T = T 
             self.n = len(self.T)
             self.ranks = ranks
             return 
-        self.T = T + '$'
+        self.T = T
         self.n = len(self.T)
         self.ranks = [0]*self.n
         k = math.ceil(math.log2(len(self.T)))
