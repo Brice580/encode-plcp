@@ -75,7 +75,7 @@ class SuffixArray:
                 phi[self.ranks[i]] = self.ranks[i-1]
 
         l = 0
-        # Calculate maximum index for bitarray
+        
         max_index = 2 * self.n
         bit_arr = bitarray(max_index)
         bit_arr.setall(False)
@@ -84,17 +84,16 @@ class SuffixArray:
             p = phi[i]
             while i + l < self.n and p + l < self.n and self.T[i + l] == self.T[p + l]:
                 l += 1
-            #print(f'compare {self.T[i:-1]} to {self.T[p:-1]}')
-            bit_position = 2 * i + l  # Calculate the bit position
-            bit_arr[bit_position] = True  # Set the bit at the calculated position
-            #print(f'Setting bit {bit_position} for i = {i} length = {l}')
+            
+            bit_position = 2 * i + l  
+            bit_arr[bit_position] = True  
             l = max(l - 1, 0)
 
         compressed_bit_array = CompressedRunsBitArray(bit_array=bit_arr)
         return compressed_bit_array
     
     def getPLCP(self):
-        #compute phi array of lexographically previous elements
+        
         phi = [0] * self.n
         for i in range (0, self.n):
             if self.ranks[i] == 0:
@@ -107,7 +106,7 @@ class SuffixArray:
         pclp = []
         for i in range(0, self.n):
             p = phi[i]
-            #print(f'compare {self.T[i:-1]} to {self.T[p:-1]}')
+
             while i + l < self.n and p + l < self.n and self.T[i + l] == self.T[p + l]:
                 l += 1
             pclp.append(l)
