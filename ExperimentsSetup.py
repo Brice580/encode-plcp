@@ -3,7 +3,7 @@ import string
 import time
 import csv
 from SA import SuffixArray
-from TestingUtils import generate_test_cases, construct_suffix_array_naive
+from TestingUtils import generate_test_cases
 import sys
 import matplotlib.pyplot as plt
 def generate_random_string(length, alphabet_size):
@@ -28,7 +28,7 @@ def run_tests():
         for i in range(5):
             case = generate_test_cases(1,4,size)[0]
             test_string = case['text']
-            sa = SuffixArray(test_string, construct_suffix_array_naive(test_string))
+            sa = SuffixArray(test_string)
 
             start_time = time.time()
             plcp_encoded = sa.getEncodedPLCP()
