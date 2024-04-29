@@ -6,8 +6,8 @@ if __name__ == '__main__':
     passed = 0
     failed = 0
     tests = generate_test_cases(10,10,10)
-    tests += generate_test_cases(10,10,10)
-    tests += generate_test_cases(10,10,10)
+    tests += generate_test_cases(10,10,100)
+    tests += generate_test_cases(10,10,1000)
     for test in tests:
         sa = SuffixArray(test['text'])
         sas.append(sa)
