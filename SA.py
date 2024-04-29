@@ -123,7 +123,6 @@ class SuffixArray:
         for i in range(1, self.n):  
             lcp[i] = plcp[self.ranks[i]]  
 
-        # The LCP value corresponding to the first index is always 0
         lcp[0] = 0
         
         return lcp
@@ -135,11 +134,10 @@ class SuffixArray:
         
         for i in range(1, self.n):  
             # use select to find the position of the ith 1 which represents the encoded PLCP value
-            encoded_index = encoded_plcp.select(self.ranks[i])  # select is 0 based
-            plcp_value = encoded_index - 2 * (self.ranks[i])  # Decode PLCP[i] using the formula PLCP[i] = j - 2i
+            encoded_index = encoded_plcp.select(self.ranks[i])  
+            plcp_value = encoded_index - 2 * (self.ranks[i])  #PLCP[i] = j - 2i
             lcp[i] = plcp_value
         
-        # The LCP value corresponding to the first index is always 0
         lcp[0] = 0
         
         return lcp
