@@ -1,11 +1,15 @@
 import math
 from bitarray import bitarray
 from succinct.compressed_runs_bit_array import CompressedRunsBitArray
-
-
+from TestingUtils import construct_suffix_array_naive, compute_plcp_naive
 class SuffixArray:
     #sets self.T to the input string and self.ranks to the lexographical ordering
-    def __init__(self, T):
+    def __init__(self, T, ranks = []):
+        if ranks != []:
+            self.T = T 
+            self.n = len(self.T)
+            self.ranks = ranks
+            return 
         self.T = T + '$'
         self.n = len(self.T)
         self.ranks = [0]*self.n
@@ -64,10 +68,11 @@ class SuffixArray:
 
     def getEncodedPLCP(self):
         phi = [0] * self.n
-        for i in range(self.n):
+        for i in range (0, self.n):
             if self.ranks[i] == 0:
                 phi[self.ranks[i]] = self.ranks[-1]
-            phi[self.ranks[i]] = self.ranks[i - 1]
+            else:
+                phi[self.ranks[i]] = self.ranks[i-1]
 
         l = 0
         # Calculate maximum index for bitarray
@@ -77,13 +82,14 @@ class SuffixArray:
 
         for i in range(self.n):
             p = phi[i]
-            while self.T[i + l] == self.T[p + l]:
+            while i + l < self.n and p + l < self.n and self.T[i + l] == self.T[p + l]:
                 l += 1
+            #print(f'compare {self.T[i:-1]} to {self.T[p:-1]}')
             bit_position = 2 * i + l  # Calculate the bit position
             bit_arr[bit_position] = True  # Set the bit at the calculated position
+            #print(f'Setting bit {bit_position} for i = {i} length = {l}')
             l = max(l - 1, 0)
 
-        print(bit_arr)
         compressed_bit_array = CompressedRunsBitArray(bit_array=bit_arr)
         return compressed_bit_array
     
@@ -93,41 +99,44 @@ class SuffixArray:
         for i in range (0, self.n):
             if self.ranks[i] == 0:
                 phi[self.ranks[i]] = self.ranks[-1]
-            phi[self.ranks[i]] = self.ranks[i-1]
+            else:
+                phi[self.ranks[i]] = self.ranks[i-1]
 
         #compute plcp
         l = 0
         pclp = []
         for i in range(0, self.n):
             p = phi[i]
-            while self.T[i + l] == self.T[p + l]:
+            #print(f'compare {self.T[i:-1]} to {self.T[p:-1]}')
+            while i + l < self.n and p + l < self.n and self.T[i + l] == self.T[p + l]:
                 l += 1
             pclp.append(l)
             l = max(l - 1, 0)
         
         return pclp
         
-    def construct_lcp_normal(self):
-        plcp = self.getPLCP()
+    def construct_lcp_normal(self, plcp = None):
+        if(plcp == None):
+            plcp = self.getPLCP()
         
         lcp = [0] * self.n
         
         for i in range(1, self.n):  
             lcp[i] = plcp[self.ranks[i]]  
-        
+
+        # The LCP value corresponding to the first index is always 0
         lcp[0] = 0
         
         return lcp
 
-    def construct_lcp_from_encoded_plcp(self):
-
-        encoded_plcp = self.getEncodedPLCP()
+    def construct_lcp_from_encoded_plcp(self, encoded_plcp = None):
+        if encoded_plcp == None:
+            encoded_plcp = self.getEncodedPLCP()
         lcp = [0] * self.n
         
         for i in range(1, self.n):  
-            # use select to find the position of the i-th 1 which represents the encoded PLCP value
-
-            encoded_index = encoded_plcp.select(self.ranks[i])  # select is 0-based
+            # use select to find the position of the ith 1 which represents the encoded PLCP value
+            encoded_index = encoded_plcp.select(self.ranks[i])  # select is 0 based
             plcp_value = encoded_index - 2 * (self.ranks[i])  # Decode PLCP[i] using the formula PLCP[i] = j - 2i
             lcp[i] = plcp_value
         
@@ -135,13 +144,4 @@ class SuffixArray:
         lcp[0] = 0
         
         return lcp
-    
-
-if __name__ == '__main__':
-    sa = SuffixArray('asasdad')
-    print('SA = ', sa.ranks)
-    print('PLCP = ', sa.getPLCP())
-    print('PLCP = ', sa.getEncodedPLCP())
-    print("LCP = ", sa.construct_lcp_normal())
-    print("LCP = ", sa.construct_lcp_from_encoded_plcp())
 
